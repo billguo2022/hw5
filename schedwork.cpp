@@ -54,6 +54,7 @@ bool schedule(
     // Initialize daily schedule with empty worker lists
     for (size_t i = 0; i < availability.size(); i++) {
         std::vector<Worker_T> empty;
+
         dailySched.push_back(empty);
     }
 
@@ -82,6 +83,7 @@ bool helper(
     // If the current day's schedule is not yet filled, try to add workers
     else {
         bool alreadyAssignedToday = false;
+				
         for (Worker_T workerId = 0; workerId < availability[0].size(); workerId++) {
             // Check if the worker is already assigned for the current day
             if (!dailySched[currentDay].empty()) {
@@ -97,8 +99,10 @@ bool helper(
             bool x = false;
             if (availability[currentDay][workerId] == 1 && workingDays[workerId] < maxShiftsAllowed
                 && !alreadyAssignedToday) {
+
                 dailySched[currentDay].push_back(workerId);
-                workingDays[workerId]++;
+
+                workingDays[workerId]=workingDays[workerId]+1;
                 // Recursively call the helper function to fill the schedule
                 x = helper(availability, dailyReq, maxShiftsAllowed, dailySched, workingDays, currentDay);
                 // If the schedule works, return true
@@ -106,7 +110,8 @@ bool helper(
                     return true;
                 // Otherwise, backtrack by removing the worker from the schedule and decrementing their working days
                 dailySched[currentDay].pop_back();
-                workingDays[workerId]--;
+
+                workingDays[workerId]=workingDays[workerId]-1;
             }
         }
     }
